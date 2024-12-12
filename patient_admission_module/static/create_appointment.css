@@ -1,0 +1,126 @@
+/* Basic reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+    flex-direction: column; /* Ensures content is stacked vertically */
+    text-align: center; /* Ensures the title is centered */
+}
+
+/* Header styling */
+header {
+    margin-bottom: 30px;
+}
+
+h1 {
+    font-size: 2rem;
+    color: #333;
+}
+
+/* Form container */
+.form-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+}
+
+/* Form styling */
+.appointment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+input {
+    padding: 8px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border 0.3s;
+}
+
+input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Submit button styling */
+.submit-btn {
+    padding: 10px;
+    font-size: 1.1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Flash message styling */
+.flash-messages ul {
+    list-style: none;
+    margin-top: 20px;
+    padding: 0;
+}
+
+.flash-messages li {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.flash-messages .success {
+    background-color: #28a745;
+    color: white;
+}
+
+.flash-messages .error {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .form-container {
+        width: 100%;
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .submit-btn {
+        font-size: 1rem;
+    }
+}

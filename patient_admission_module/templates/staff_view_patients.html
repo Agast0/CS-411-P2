@@ -8,18 +8,18 @@
 </head>
 <body>
     <header>
-    <h1>All Patients</h1>
-    <nav>
-        <a href="{{ url_for('admission.register_patient') }}">Register New Patient</a>
-        <a href="{{ url_for('admission.create_appointment') }}">Create Appointment</a>
-    </nav>
-    <!-- Search Bar -->
-    <form action="{{ url_for('admission.view_all_patients') }}" method="GET">
-        <input type="text" name="search" placeholder="Search by name or email"
-               value="{{ request.args.get('search', '') }}" class="search-bar">
-        <button type="submit" class="search-btn">Search</button>
-    </form>
-</header>
+        <h1>All Patients</h1>
+        <nav>
+            <a href="{{ url_for('admission.register_patient') }}">Register New Patient</a>
+            <a href="{{ url_for('admission.create_appointment') }}">Create Appointment</a>
+        </nav>
+        <!-- Search Bar -->
+        <form action="{{ url_for('admission.view_all_patients') }}" method="GET">
+            <input type="text" name="search" placeholder="Search by name or email"
+                   value="{{ request.args.get('search', '') }}" class="search-bar">
+            <button type="submit" class="search-btn">Search</button>
+        </form>
+    </header>
 
     <main>
         {% if patients %}
@@ -34,6 +34,7 @@
                     <th>Appointments</th>
                     <th>Manage</th>
                     <th>Delete</th>
+                    <th>View Appointments</th> <!-- New column for the button -->
                 </tr>
             </thead>
             <tbody>
@@ -64,6 +65,10 @@
                         <form action="{{ url_for('admission.delete_patient', patient_id=patient.id) }}" method="POST" style="display:inline;">
                             <button type="submit" onclick="return confirm('Are you sure you want to delete this patient?');" class="delete-btn">Delete</button>
                         </form>
+                    </td>
+                    <td>
+                        <!-- View Appointments Button -->
+                        <a href="{{ url_for('admission.view_appointments', patient_id=patient.id) }}" class="view-appointments-btn">View Appointments</a>
                     </td>
                 </tr>
                 {% endfor %}

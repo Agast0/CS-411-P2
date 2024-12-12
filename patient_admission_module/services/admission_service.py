@@ -111,7 +111,7 @@ class AdmissionService:
         return None
 
     # Appointment Operations
-    def create_appointment(self, date: date, time: str, patient_id: int, staff_id: int) -> Optional[Appointment]:
+    def create_appointment(self, date: str, time: str, patient_id: int, staff_id: int) -> Optional[Appointment]:
         patient = self.get_patient(patient_id)
         staff = self.get_staff(staff_id)
 
@@ -169,7 +169,28 @@ class AdmissionService:
         return False
 
     def get_appointments_by_patient(self, patient_id: int) -> List[Appointment]:
-        return [Appointment(**appointment) for appointment in self.appointments if appointment['patient_id'] == patient_id]
+        # Fetch all appointments for the given patient
+        appointments = [Appointment(**appointment) for appointment in self.appointments if
+                        appointment['patient_id'] == patient_id]
 
-    def get_appointments_by_staff(self, staff_id: int) -> List[Appointment]:
-        return [Appointment(**appointment) for appointment in self.appointments if appointment['staff_id'] == staff_id]
+        # Add staff information to each appointment
+        for appointment in appointments:
+            staff_id = appointment.staff_id  # Assuming there's a staff_id field
+            staff = self.get_staff_by_id(staff_id)  # Assuming a method to get staff details
+            appointment.staff = staff  # Add the staff object to the appointment
+
+        return appointments
+
+    def get_staff_by_id(self, staff_id):
+        for staff in self.staff_members:
+            if staff['id'] == staff_id:
+                return Staff(**staff)
+        return None
+
+    def cancel_appointment(self, appointment_id):
+        appointment = self.get_appointment(appointment_id)
+        if appointment:
+            self.appointments = [appt for appt in self.appointments if appt['id'] != appointment_id]
+            self.save_data(self.appointments_file_path, self.appointments)
+            return True
+        return False

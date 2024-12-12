@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "id": 1,
+    "first_name": "staff",
+    "last_name": "one",
+    "role": "DOCTOR",
+    "email": "staffone@email.com",
+    "contact_number": "1234567890",
+    "appointments": []
+  }
+]

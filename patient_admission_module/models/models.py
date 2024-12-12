@@ -69,14 +69,15 @@ class Staff:
                  last_name: str,
                  role: Role,
                  email: str,
-                 contact_number: str):
+                 contact_number: str,
+                 appointments: List['Appointment'] = None):
         self.id = id
         self.first_name = first_name
         self.last_name = last_name
         self.role = role
         self.email = email
         self.contact_number = contact_number
-        self.appointments: List['Appointment'] = []
+        self.appointments = appointments or []
 
     def to_dict(self):
         return {
@@ -105,7 +106,7 @@ class Staff:
 class Appointment:
     def __init__(self,
                  id: int,
-                 date: date,
+                 date: str,
                  time: str,
                  patient_id: int,
                  staff_id: int):
@@ -118,7 +119,7 @@ class Appointment:
     def to_dict(self):
         return {
             "id": self.id,
-            "date": self.date.isoformat(),
+            "date": self.date,
             "time": self.time,
             "patient_id": self.patient_id,
             "staff_id": self.staff_id,
@@ -128,7 +129,7 @@ class Appointment:
     def from_dict(data: dict):
         return Appointment(
             id=data["id"],
-            date=date.fromisoformat(data["date"]),
+            date=data["date"],
             time=data["time"],
             patient_id=data["patient_id"],
             staff_id=data["staff_id"]

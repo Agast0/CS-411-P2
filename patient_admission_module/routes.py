@@ -49,21 +49,10 @@ def view_appointments(patient_id):
     patient = admission_service.get_patient(patient_id)
     if not patient:
         flash("Patient not found.", "error")
-        return redirect(url_for('admission.register_patient'))
+        return redirect(url_for('admission.view_all_patients'))
 
     appointments = admission_service.get_appointments_by_patient(patient_id)
     return render_template('view_appointments.html', patient=patient, appointments=appointments)
-
-# Staff View Appointments
-@admission_bp.route('/appointments/staff/<int:staff_id>', methods=['GET'])
-def view_staff_appointments(staff_id):
-    staff = admission_service.get_staff_by_id(staff_id)  # Assuming this method exists in AdmissionService
-    if not staff:
-        flash("Staff not found.", "error")
-        return redirect(url_for('admission.view_all_patients'))
-
-    appointments = admission_service.get_appointments_by_staff(staff_id)  # Assuming this method exists
-    return render_template('view_staff_appointments.html', staff=staff, appointments=appointments)
 
 # Staff View All Patients
 @admission_bp.route('/patients', methods=['GET'])
@@ -116,3 +105,21 @@ def manage_patient(patient_id):
         return redirect(url_for('admission.view_all_patients'))
 
     return render_template('manage_patient.html', patient=patient, gender_choices=Gender)
+
+# Cancel Appointment
+@admission_bp.route('/appointment/cancel/<int:appointment_id>', methods=['POST'])
+def cancel_appointment(appointment_id):
+    appointment = admission_service.get_appointment(appointment_id)  # Assuming this method exists
+    if not appointment:
+        flash("Appointment not found.", "error")
+        return redirect(url_for('admission.view_all_patients'))
+
+    try:
+        admission_service.cancel_appointment(appointment_id)
+        flash("Appointment canceled successfully!", "success")
+    except Exception as e:
+        flash(f"Error canceling appointment: {str(e)}", "error")
+
+    patient = admission_service.get_patient(appointment.patient_id)
+
+    return redirect(url_for('admission.view_appointments', patient=patient, patient_id=appointment.patient_id))
