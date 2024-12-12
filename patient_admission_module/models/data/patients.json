@@ -1,0 +1,22 @@
+[
+    {
+        "id": 1,
+        "first_name": "zahaab",
+        "last_name": "khawaja",
+        "date_of_birth": "2024-12-01",
+        "gender": "MALE",
+        "contact_number": "12",
+        "email": "a@b.com",
+        "appointments": []
+    },
+    {
+        "id": 2,
+        "first_name": "a",
+        "last_name": "b",
+        "date_of_birth": "2002-06-02",
+        "gender": "MALE",
+        "contact_number": "1",
+        "email": "a@B.com",
+        "appointments": []
+    }
+]

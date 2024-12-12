@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Patient</title>
+    <link rel="stylesheet" href="{{ url_for('admission.static', filename='manage_patient.css') }}">
+
+    <script>
+        // Client-side validation
+        function validateForm() {
+            var firstName = document.getElementById("first_name").value;
+            var lastName = document.getElementById("last_name").value;
+            var dateOfBirth = document.getElementById("date_of_birth").value;
+            var contactNumber = document.getElementById("contact_number").value;
+            var email = document.getElementById("email").value;
+
+            // Check if any field is empty
+            if (firstName === "" || lastName === "" || dateOfBirth === "" || contactNumber === "" || email === "") {
+                alert("All fields are required!");
+                return false; // Prevent form submission
+            }
+
+            // Additional validation for email format
+            var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            if (!emailPattern.test(email)) {
+                alert("Please enter a valid email address.");
+                return false;
+            }
+
+            // Additional validation for contact number (just checking digits for simplicity)
+            var contactNumberPattern = /^[0-9]+$/;
+            if (!contactNumberPattern.test(contactNumber)) {
+                alert("Contact number must be numeric.");
+                return false;
+            }
+
+            // Check if the date of birth is in the past
+            var dob = new Date(dateOfBirth);
+            var today = new Date();
+            if (dob >= today) {
+                alert("Date of Birth must be in the past.");
+                return false;
+            }
+
+            return true; // Allow form submission
+        }
+    </script>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <h1>Manage Patient</h1>
+    </header>
+
+    <!-- Main Content Section -->
+    <main>
+        <!-- Display Success or Error Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul>
+                    {% for category, message in messages %}
+                        <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Patient Management Form -->
+        <form method="POST" onsubmit="return validateForm()">
+            <label for="first_name">First Name</label>
+            <input type="text" id="first_name" name="first_name" value="{{ patient.first_name }}" required>
+
+            <label for="last_name">Last Name</label>
+            <input type="text" id="last_name" name="last_name" value="{{ patient.last_name }}" required>
+
+            <label for="date_of_birth">Date of Birth</label>
+            <!-- Ensure the date is in yyyy-mm-dd format -->
+            <input type="date" id="date_of_birth" name="date_of_birth" value="{{ patient.date_of_birth }}" required>
+
+            <label for="gender">Gender</label>
+            <select id="gender" name="gender" required>
+                {% for gender in gender_choices %}
+                    <option value="{{ gender.name }}" {% if gender.name == patient.gender %}selected{% endif %}>{{ gender.value }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="contact_number">Contact Number</label>
+            <input type="tel" id="contact_number" name="contact_number" value="{{ patient.contact_number }}" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" value="{{ patient.email }}" required>
+
+            <!-- Submit Button -->
+            <button type="submit">Update Patient</button>
+        </form>
+
+        <!-- Back to Patients List Button -->
+        <a href="{{ url_for('admission.view_all_patients') }}" class="view-patients-btn">Back to All Patients</a>
+    </main>
+</body>
+</html>

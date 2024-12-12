@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Inpatients</title>
+</head>
+<body>
+    <h1>Manage Inpatients</h1>
+    <form action="/inpatient/manage" method="POST">
+        <label for="patient_id">Patient ID:</label>
+        <input type="text" name="patient_id" required><br>
+        <label for="room_number">Room Number:</label>
+        <input type="text" name="room_number" required><br>
+        <label for="status">Status:</label>
+        <input type="text" name="status" required><br>
+        <button type="submit">Add Inpatient</button>
+    </form>
+</body>
+</html>

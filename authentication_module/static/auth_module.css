@@ -1,0 +1,105 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 300px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 5px;
+    color: #555;
+}
+
+input[type="text"],
+input[type="password"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+input[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Flash message styling */
+.flash-message {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 4px;
+    color: white;
+    text-align: center; /* Center-align text */
+}
+
+/* Success message */
+.flash-message.success {
+    background-color: #28a745; /* Green */
+}
+
+/* Danger message */
+.flash-message.danger {
+    background-color: #dc3545; /* Red */
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin: 5px 0;
+}
+
+.logo {
+    display: block;
+    margin: 0 auto 20px; /* Center the image and add bottom margin */
+    width: 80%; /* Adjust the width as needed */
+    max-width: 100px; /* Set a maximum width */
+    height: auto; /* Maintain aspect ratio */
+}
+
+/* Add this to your auth_module.css */
+button[type="button"] {
+    background-color: transparent; /* Make it look like a text button */
+    color: #007bff; /* Bootstrap primary color */
+    border: none; /* Remove default border */
+    cursor: pointer; /* Show pointer cursor */
+    margin-left: 5px; /* Space between password input and button */
+}
+
+button[type="button"]:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+

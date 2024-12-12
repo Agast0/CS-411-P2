@@ -1,0 +1,17 @@
+[
+    {
+        "username": "admin",
+        "password": "$2b$12$ZeSKsnbqBy633rhCSEhpqOuP0LsUYrwjHcAXlz6LlITV25D1qqtW.",
+        "role": "admin"
+    },
+    {
+        "username": "doctor",
+        "password": "$2b$12$ZeSKsnbqBy633rhCSEhpqOuP0LsUYrwjHcAXlz6LlITV25D1qqtW.",
+        "role": "doctor"
+    },
+    {
+        "username": "patient",
+        "password": "$2b$12$ZeSKsnbqBy633rhCSEhpqOuP0LsUYrwjHcAXlz6LlITV25D1qqtW.",
+        "role": "patient"
+    }
+]

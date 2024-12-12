@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Patient</title>
+    <link rel="stylesheet" href="{{ url_for('admission.static', filename='patient_register.css') }}">
+    <script>
+        // Client-side validation
+        function validateForm() {
+            var firstName = document.getElementById("first_name").value;
+            var lastName = document.getElementById("last_name").value;
+            var dateOfBirth = document.getElementById("date_of_birth").value;
+            var contactNumber = document.getElementById("contact_number").value;
+            var email = document.getElementById("email").value;
+
+            if (firstName === "" || lastName === "" || dateOfBirth === "" || contactNumber === "" || email === "") {
+                alert("All fields are required!");
+                return false; // Prevent form submission
+            }
+
+            // Additional validation for email format
+            var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            if (!emailPattern.test(email)) {
+                alert("Please enter a valid email address.");
+                return false;
+            }
+
+            // Additional validation for contact number (just checking digits for simplicity)
+            var contactNumberPattern = /^[0-9]+$/;
+            if (!contactNumberPattern.test(contactNumber)) {
+                alert("Contact number must be numeric.");
+                return false;
+            }
+
+            // Check if the date of birth is in the past
+            var dob = new Date(dateOfBirth);
+            var today = new Date();
+            if (dob >= today) {
+                alert("Date of Birth must be in the past.");
+                return false;
+            }
+
+            return true; // Allow form submission
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Register New Patient</h1>
+    </header>
+    <main>
+        <form method="POST" onsubmit="return validateForm()">
+            <label for="first_name">First Name:</label>
+            <input type="text" id="first_name" name="first_name" required><br>
+
+            <label for="last_name">Last Name:</label>
+            <input type="text" id="last_name" name="last_name" required><br>
+
+            <label for="date_of_birth">Date of Birth:</label>
+            <input type="date" id="date_of_birth" name="date_of_birth" required><br>
+
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender" required>
+                {% for gender in gender_choices %}
+                    <option value="{{ gender.name }}">{{ gender.value }}</option>
+                {% endfor %}
+            </select><br>
+
+            <label for="contact_number">Contact Number:</label>
+            <input type="text" id="contact_number" name="contact_number" required><br>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required><br>
+
+            <button type="submit">Register</button>
+        </form>
+
+        <a href="{{ url_for('admission.view_all_patients') }}" class="view-patients-btn">View Patients</a>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <ul>
+            {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+    </main>
+</body>
+</html>

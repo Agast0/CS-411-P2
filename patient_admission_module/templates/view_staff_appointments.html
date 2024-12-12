@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Appointments</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Staff Appointments</h1>
+        <nav>
+            <a href="{{ url_for('admission.manage_patients') }}">Manage Patients</a>
+            <a href="{{ url_for('admission.create_appointment') }}">Create New Appointment</a>
+        </nav>
+    </header>
+    <main>
+        <h2>Upcoming Appointments</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Patient</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appointment in appointments %}
+                <tr>
+                    <td>{{ appointment.date }}</td>
+                    <td>{{ appointment.time }}</td>
+                    <td>{{ appointment.patient.first_name }} {{ appointment.patient.last_name }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="3">No appointments found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </main>
+</body>
+</html>
