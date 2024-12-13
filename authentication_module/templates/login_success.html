@@ -15,7 +15,11 @@
 
         <!-- Flexbox container for the buttons -->
         <div class="button-container">
-            <a href="/" class="btn">Go to Home</a>
+            {% if user_role == 'patient' %}
+                <a href="/auth/patient-login" class="btn">Patient Login</a>
+            {% else %}
+                <a href="/admission/patients" class="btn">Patient Admissions</a>
+            {% endif %}
 
             <form action="{{ url_for('auth.logout') }}" method="GET" style="margin: 0;">
                 <button type="submit" class="btn logout-button">Logout</button>

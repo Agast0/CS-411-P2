@@ -14,9 +14,11 @@ class AuthenticationService:
         users = self.load_users()
         for user in users:
             if user['username'] == username and verify_password(password, user['password']):
-                return True
-        return False
+                return {"authenticated": True, "role": user.get("role")}  # Return both authentication status and role
+        return {"authenticated": False, "role": None}  # Return a default structure when authentication fails
 
     def is_authenticated(self):
-        return session.get('user_authenticated')
-
+        return {
+            "authenticated": session.get('user_authenticated'),
+            "role": session.get('user_role')
+        }

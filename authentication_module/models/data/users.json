@@ -7,7 +7,7 @@
     {
         "username": "doctor",
         "password": "$2b$12$ZeSKsnbqBy633rhCSEhpqOuP0LsUYrwjHcAXlz6LlITV25D1qqtW.",
-        "role": "doctor"
+        "role": "staff"
     },
     {
         "username": "patient",

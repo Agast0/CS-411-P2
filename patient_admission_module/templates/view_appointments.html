@@ -10,11 +10,13 @@
     <header>
         <div class="container">
             <h1>{{ patient.first_name }}'s Appointments</h1>
+            {% if user_role != 'patient' %}
             <nav>
                 <a href="{{ url_for('admission.register_patient') }}">Register New Patient</a>
                 <a href="{{ url_for('admission.create_appointment') }}">Create New Appointment</a>
                 <a href="{{ url_for('admission.view_all_patients') }}">View All Patients</a>
             </nav>
+            {% endif %}
         </div>
     </header>
 
