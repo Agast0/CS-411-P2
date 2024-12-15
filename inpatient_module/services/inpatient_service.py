@@ -194,34 +194,6 @@ class InpatientService:
             return inpatient
         return None
 
-    def add_test(self, inpatient_id: int, test_type: str, staff_id: int, test_date: str,
-                 result: Optional[str] = None) -> bool:
-        """Add a test to an inpatient's record."""
-        inpatient = self.get_inpatient(inpatient_id)
-        if inpatient:
-            # Create a new Test object
-            test_id = self.generate_test_id()  # Assume there's a method to generate unique test IDs
-            new_test = Test(
-                id=test_id,
-                patient_id=inpatient_id,
-                staff_id=staff_id,
-                test_type=test_type,
-                date=test_date,
-                result=result
-            )
-            # # Add the test to the inpatient's record (assuming tests are stored in a list)
-            if 'tests' not in inpatient:
-                inpatient['tests'] = []  # Initialize the tests list if not already present
-
-            inpatient['tests'].append(test_id)  # Store the test as a dict
-
-            # Save the updated inpatient data
-            print(inpatient)
-            self.save_data(self.inpatients_file_path, self.inpatients)
-            return True
-
-        return False
-
     def generate_test_id(self) -> int:
         """Generate a unique test ID. This could be a simple counter or a more complex approach."""
         # Placeholder logic for generating unique test IDs
@@ -260,3 +232,34 @@ class InpatientService:
         self.save_data(self.inpatients_file_path, self.inpatients)
 
         return inpatient
+
+    def add_test(self, inpatient_id: int, test_type: str, staff_id: int, test_date: str,
+                 result: Optional[str] = None) -> bool:
+        """Add a test to an inpatient's record."""
+        inpatient = self.get_inpatient(inpatient_id)
+        if inpatient:
+            # Create a new Test object
+            test_id = self.generate_test_id()  # Assume there's a method to generate unique test IDs
+            new_test = Test(
+                id=test_id,
+                patient_id=inpatient.patient_id,  # Use the patient_id from the Inpatient object
+                staff_id=staff_id,
+                test_type=test_type,
+                date=test_date,
+                result=result
+            )
+            # Add the test to the inpatient's record (assuming tests are stored in a list)
+            inpatient.tests.append(test_id)  # Store the test ID in the 'tests' list of the Inpatient object
+
+            # Add the test to the tests list (presumably a list of all tests)
+            self.tests.append(new_test.to_dict())
+            self.save_data('inpatient_module/models/data/tests.json', self.tests)
+            # Update inpatient record in the data
+            for i, inp in enumerate(self.inpatients):
+                if inp["id"] == inpatient_id:
+                    self.inpatients[i] = inpatient.to_dict()
+            print(self.inpatients)
+            self.save_data(self.inpatients_file_path, self.inpatients)
+            return True
+
+        return False
