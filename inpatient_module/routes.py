@@ -72,21 +72,24 @@ def view_room(room_id):
 
 
 # Endpoint to assign/update a room for an inpatient
-@inpatient_bp.route('/<int:inpatient_id>/assign-room', methods=['PUT'])
+@inpatient_bp.route('/<int:inpatient_id>/assign-room', methods=['POST'])
 def assign_room(inpatient_id):
     try:
-        data = request.json
-        room_id = data.get('room_id')
-
+        room_id = request.form.get('room_id')  # Fetch 'room_id' from form data
         if not room_id:
             return jsonify({"error": "Room number is required."}), 400
 
-        inpatient_service.update_room(inpatient_id, room_id)
-        return jsonify({"message": "Room assignment updated successfully."}), 200
+        # Call the service to change the room assignment
+        inpatient_service.change_room(inpatient_id, room_id)
+
+        flash("Patient registered successfully!", "success")
 
     except Exception as e:
         print(f"Error updating room: {e}")
-        return jsonify({"error": "Failed to update room assignment."}), 500
+        flash(str(e), "error")
+
+    return redirect(url_for('inpatient.view_inpatient', inpatient_id=inpatient_id))
+
 
 
 # Endpoint to add notes for an inpatient

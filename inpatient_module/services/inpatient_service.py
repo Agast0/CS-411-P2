@@ -92,7 +92,11 @@ class InpatientService:
                             test_data = self.get_test_by_id(test_data)  # Assuming you have a method to fetch the test
 
                         # Now, test_data should be a dictionary, and we can call from_dict safely
+                        if isinstance(test_data, Test):
+                            test_data = test_data.to_dict()  # Convert it to a dictionary if it's already a Test object
+
                         test_obj = Test.from_dict(test_data)
+
                         inpatient_obj.tests.append(test_obj)
 
                 return inpatient_obj
@@ -138,6 +142,7 @@ class InpatientService:
     def get_all_rooms(self) -> List[Room]:
         """Get all rooms."""
         # Assuming rooms are stored in a list of dicts, convert each dict to a Room object.
+        print("Rooms:", self.rooms)  # Debugging line to inspect the rooms data
         return [Room(**room) for room in self.rooms]
 
     def add_treatment_notes(self, inpatient_id: int, treatment_note: str):
@@ -216,4 +221,46 @@ class InpatientService:
         """Generate a unique test ID. This could be a simple counter or a more complex approach."""
         # Placeholder logic for generating unique test IDs
         return len(self.inpatients) + 1  # For simplicity, using the number of inpatients as the ID
+
+    def get_room(self, room_id):
+        print(f"Looking for room with ID: {room_id}")
+
+        # Loop through all rooms and print each room's details
+        for room in self.rooms:
+            print(f"Checking room: {room}", "comparing", room["room_id"], room_id, "result", room["room_id"] == room_id, "type", type(room["room_id"]), type(room_id))
+
+            if room["room_id"] == room_id:
+                print(f"Found room: {room}")
+                return room
+        # If no room is found, raise an exception
+        raise ValueError(f"Room with ID {room_id} does not exist.")
+
+    def change_room(self, inpatient_id: int, new_room_id: int) -> Optional[Inpatient]:
+        # Get the inpatient
+        inpatient = self.get_inpatient(inpatient_id)
+        if not inpatient:
+            raise ValueError(f"Inpatient with ID {inpatient_id} does not exist.")
+
+        # Get the current room
+        current_room = self.get_room(inpatient.room_id)
+        if not current_room:
+            raise ValueError(f"Current room with ID {inpatient.room_id} does not exist.")
+
+        # Get the new room
+        new_room = self.get_room(int(new_room_id))
+        if not new_room:
+            raise ValueError(f"New room with ID {new_room_id} does not exist.")
+
+        # Update inpatient's room assignment
+        inpatient.room_id = new_room_id
+
+        # Update inpatient record in the data
+        for i, inp in enumerate(self.inpatients):
+            if inp["id"] == inpatient_id:
+                self.inpatients[i] = inpatient.to_dict()
+        #
+        # Save updated room and inpatient data
+        self.save_data(self.inpatients_file_path, self.inpatients)
+
+        return inpatient
 

@@ -1,5 +1,5 @@
 from typing import List, Optional
-from datetime import date
+from datetime import date, datetime
 from enum import Enum
 
 
@@ -12,18 +12,15 @@ class RoomType(Enum):
 class Room:
     def __init__(self,
                  room_id: int,
-                 number: str,
                  type: RoomType,  # Enum for room type
                  is_occupied: bool):
         self.room_id = room_id
-        self.number = number
         self.type = type
         self.is_occupied = is_occupied
 
     def to_dict(self):
         return {
             "room_id": self.room_id,
-            "number": self.number,
             "type": self.type.value,  # Save the enum value as string
             "is_occupied": self.is_occupied,
         }
@@ -32,7 +29,6 @@ class Room:
     def from_dict(data: dict):
         return Room(
             room_id=data["room_id"],
-            number=data["number"],
             type=RoomType(data["type"]),
             is_occupied=data["is_occupied"]
         )
@@ -62,12 +58,21 @@ class Inpatient:
         self.tests = tests or []
 
     def to_dict(self):
+        if isinstance(self.admission_date, str):
+            self.admission_date = datetime.strptime(self.admission_date, "%Y-%m-%d").date()
+
+        if isinstance(self.discharge_date, str):
+            if self.discharge_date:
+                self.discharge_date = datetime.strptime(self.discharge_date, "%Y-%m-%d").date()
+            else:
+                self.discharge_date = None
+
         return {
             "id": self.id,
             "patient_id": self.patient_id,
-            "admission_date": self.admission_date.isoformat(),
+            "admission_date": self.admission_date.isoformat() if self.admission_date else None,
             "discharge_date": self.discharge_date.isoformat() if self.discharge_date else None,
-            "room_id": self.room_id,  # Use room_id in the dict
+            "room_id": self.room_id,
             "staff_id": self.staff_id,
             "status": self.status,
             "treatment_notes": self.treatment_notes,
@@ -89,7 +94,6 @@ class Inpatient:
             notes=data.get("notes", []),
             tests=data.get("tests", [])
         )
-
 
 class Test:
     def __init__(self,
