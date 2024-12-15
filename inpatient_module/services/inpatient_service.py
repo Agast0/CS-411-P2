@@ -29,7 +29,6 @@ class InpatientService:
 
     def get_next_id(self, data: List[dict]) -> int:
         """Get the next available ID by finding the max ID in the data."""
-        print("Loaded inpatient data:", data)  # Debugging line to inspect the data
         max_id = 0
         for item in data:
             try:
@@ -39,11 +38,6 @@ class InpatientService:
         return max_id + 1 if max_id > 0 else 1
 
     def get_inpatients_by_room(self, room_id: str) -> List[Inpatient]:
-        """
-        Get all inpatients assigned to a specific room.
-        :param room_id: The ID of the room.
-        :return: A list of Inpatient objects assigned to the room.
-        """
         inpatients_in_room = [
             Inpatient(**inpatient) for inpatient in self.inpatients if inpatient['room_id'] == room_id
         ]
@@ -83,8 +77,6 @@ class InpatientService:
                     # Replace foreign key IDs with actual Test objects
                     inpatient_obj.tests = []
                     for test_data in inpatient['tests']:
-                        # Print test_data to debug
-                        print(test_data)
 
                         # Check if test_data is an integer (i.e., a test ID)
                         if isinstance(test_data, int):
@@ -142,24 +134,29 @@ class InpatientService:
     def get_all_rooms(self) -> List[Room]:
         """Get all rooms."""
         # Assuming rooms are stored in a list of dicts, convert each dict to a Room object.
-        print("Rooms:", self.rooms)  # Debugging line to inspect the rooms data
         return [Room(**room) for room in self.rooms]
 
-    def add_treatment_notes(self, inpatient_id: int, treatment_note: str):
-        """Add treatment notes to an inpatient's record."""
+    def add_notes(self, inpatient_id: int, note: str) -> Optional[Inpatient]:
+        """Add a note to an inpatient's record."""
         inpatient = self.get_inpatient(inpatient_id)
         if not inpatient:
             raise ValueError(f"Inpatient with ID {inpatient_id} does not exist.")
 
-        if not hasattr(inpatient, 'treatment_notes') or inpatient.treatment_notes is None:
-            inpatient.treatment_notes = []
+        # Initialize notes if not already present
+        if not hasattr(inpatient, 'notes') or inpatient.notes is None:
+            inpatient.notes = []
 
-        inpatient.treatment_notes.append(treatment_note)
+        # Add the new note to the notes list
+        inpatient.notes.append(note)
 
+        # Update the inpatient record and save
         for i, inp in enumerate(self.inpatients):
             if inp['id'] == inpatient_id:
                 self.inpatients[i] = inpatient.to_dict()
+
         self.save_data(self.inpatients_file_path, self.inpatients)
+
+        return inpatient
 
     def change_status(self, inpatient_id: int, new_status: str) -> Optional[Inpatient]:
         inpatient = self.get_inpatient(inpatient_id)
@@ -223,16 +220,9 @@ class InpatientService:
         return len(self.inpatients) + 1  # For simplicity, using the number of inpatients as the ID
 
     def get_room(self, room_id):
-        print(f"Looking for room with ID: {room_id}")
-
-        # Loop through all rooms and print each room's details
         for room in self.rooms:
-            print(f"Checking room: {room}", "comparing", room["room_id"], room_id, "result", room["room_id"] == room_id, "type", type(room["room_id"]), type(room_id))
-
             if room["room_id"] == room_id:
-                print(f"Found room: {room}")
                 return room
-        # If no room is found, raise an exception
         raise ValueError(f"Room with ID {room_id} does not exist.")
 
     def change_room(self, inpatient_id: int, new_room_id: int) -> Optional[Inpatient]:
@@ -258,8 +248,9 @@ class InpatientService:
         for i, inp in enumerate(self.inpatients):
             if inp["id"] == inpatient_id:
                 self.inpatients[i] = inpatient.to_dict()
-        #
-        # Save updated room and inpatient data
+
+
+        print(self.inpatients)
         self.save_data(self.inpatients_file_path, self.inpatients)
 
         return inpatient

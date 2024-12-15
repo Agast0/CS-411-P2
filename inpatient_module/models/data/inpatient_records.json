@@ -7,7 +7,6 @@
         "room_id": 1,
         "staff_id": 501,
         "status": null,
-        "treatment_notes": "Patient admitted for pneumonia treatment.",
         "notes": [
             "Initial treatment started with antibiotics.",
             "Patient showing mild improvement after 48 hours."
@@ -25,7 +24,6 @@
         "room_id": 3,
         "staff_id": 502,
         "status": null,
-        "treatment_notes": "Undergoing post-surgical care for appendectomy.",
         "notes": [
             "Patient recovering well, pain under control."
         ],

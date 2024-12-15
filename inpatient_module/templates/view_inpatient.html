@@ -104,11 +104,7 @@
         {% endfor %}
     </ul>
 
-    <!-- Notes Section -->
-    <h3>Treatment Notes:</h3>
-    <ul>
-            <li>{{ inpatient.treatment_notes }}</li>
-    </ul>
+
 
     <!-- Tests Section -->
     {% if inpatient.tests %}
@@ -147,14 +143,6 @@
             <button type="submit">Add Note</button>
         </form>
 
-        <!-- Add Treatment Notes Form -->
-        <form action="{{ url_for('inpatient.add_treatment_notes', inpatient_id=inpatient.id) }}" method="POST">
-            <div class="form-group">
-                <label for="treatment_note">Add Treatment Note:</label>
-                <textarea id="treatment_note" name="treatment_note" required></textarea>
-            </div>
-            <button type="submit">Add Treatment Note</button>
-        </form>
 
         <!-- Change Status Form -->
         <form action="{{ url_for('inpatient.change_status', inpatient_id=inpatient.id) }}" method="POST">

@@ -43,7 +43,6 @@ class Inpatient:
                  room_id: int,  # Ensure the argument is room_id
                  staff_id: int,
                  status: Optional[str] = None,
-                 treatment_notes: Optional[str] = None,
                  notes: Optional[List[str]] = None,
                  tests: Optional[List[int]] = None):
         self.id = id
@@ -53,7 +52,6 @@ class Inpatient:
         self.room_id = room_id  # Assign room_id to the attribute
         self.staff_id = staff_id
         self.status = status
-        self.treatment_notes = treatment_notes
         self.notes = notes or []
         self.tests = tests or []
 
@@ -75,7 +73,6 @@ class Inpatient:
             "room_id": self.room_id,
             "staff_id": self.staff_id,
             "status": self.status,
-            "treatment_notes": self.treatment_notes,
             "notes": self.notes,
             "tests": self.tests,
         }
@@ -90,7 +87,6 @@ class Inpatient:
             room_id=data["room_id"],  # Ensure room_id is passed
             staff_id=data["staff_id"],
             status=data.get("status"),
-            treatment_notes=data.get("treatment_notes"),
             notes=data.get("notes", []),
             tests=data.get("tests", [])
         )

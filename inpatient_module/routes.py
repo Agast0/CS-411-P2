@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 from inpatient_module.services.inpatient_service import InpatientService
 
 # Blueprint setup for the inpatient module
@@ -77,7 +77,8 @@ def assign_room(inpatient_id):
     try:
         room_id = request.form.get('room_id')  # Fetch 'room_id' from form data
         if not room_id:
-            return jsonify({"error": "Room number is required."}), 400
+            flash("Room number is required.", "danger")
+            return redirect(url_for('inpatient.view_inpatient', inpatient_id=inpatient_id))
 
         # Call the service to change the room assignment
         inpatient_service.change_room(inpatient_id, room_id)
@@ -96,54 +97,37 @@ def assign_room(inpatient_id):
 @inpatient_bp.route('/<int:inpatient_id>/notes', methods=['POST'])
 def add_notes(inpatient_id):
     try:
-        data = request.json
-        note = data.get('note')
+        note = request.form.get('note')
 
         if not note:
-            return jsonify({"error": "Note content is required."}), 400
+            flash("Note content is required.", "danger")
+            return redirect(url_for('inpatient.view_inpatient', inpatient_id=inpatient_id))
 
         inpatient_service.add_notes(inpatient_id, note)
-        return jsonify({"message": "Note added successfully."}), 201
+        flash("Note added successfully.", "success")
 
     except Exception as e:
         print(f"Error adding note: {e}")
-        return jsonify({"error": "Failed to add note."}), 500
+        flash("Failed to add note.", "danger")
 
-
-# Endpoint to add treatment notes for an inpatient
-@inpatient_bp.route('/<int:inpatient_id>/add-treatment-notes', methods=['POST'])
-def add_treatment_notes(inpatient_id):
-    try:
-        data = request.form
-        treatment_note = data.get('treatment_note')
-
-        if not treatment_note:
-            flash("Treatment note is required!", "danger")
-            return redirect(url_for('inpatient.view_inpatient', inpatient_id=inpatient_id))
-
-        inpatient_service.add_treatment_notes(inpatient_id, treatment_note)
-        flash("Treatment note added successfully!", "success")
-        return redirect(url_for('inpatient.view_inpatient', inpatient_id=inpatient_id))
-
-    except Exception as e:
-        print(f"Error adding treatment note: {e}")
-        flash("Failed to add treatment note. Please try again.", "danger")
-        return redirect(url_for('inpatient.view_inpatient', inpatient_id=inpatient_id))
-
+    return redirect(url_for('inpatient.view_inpatient', inpatient_id=inpatient_id))
 
 @inpatient_bp.route('/<int:inpatient_id>/change_status', methods=['POST'])
 def change_status(inpatient_id):
     """Change the status of an inpatient."""
-    data = request.json
-    new_status = data.get('status')
+    new_status = request.form.get('status')
     if not new_status:
-        return jsonify({'error': 'Status is required.'}), 400
+        flash("Status is required.", "danger")
+        return redirect(url_for('inpatient.view_inpatient', inpatient_id=inpatient_id))
 
     try:
-        updated_inpatient = inpatient_service.change_status(inpatient_id, new_status)
-        return jsonify(updated_inpatient.to_dict()), 200
+        inpatient_service.change_status(inpatient_id, new_status)
+        flash(f"Status updated to {new_status}.", "success")
+        return redirect(url_for('inpatient.view_inpatient', inpatient_id=inpatient_id))
+
     except ValueError as e:
-        return jsonify({'error': str(e)}), 404
+        flash(f"Error: {str(e)}", "danger")
+        return redirect(url_for('inpatient.view_inpatient', inpatient_id=inpatient_id))
 
 
 @inpatient_bp.route('/<int:inpatient_id>/discharge', methods=['POST'])
