@@ -39,7 +39,7 @@ def manage_inpatient():
                 return redirect(url_for('inpatient.manage_inpatient'))
 
             # Call the service layer to add inpatient
-            inpatient_service.add_inpatient(inpatient_data)
+            inpatient_service.add_inpatient(inpatient_data['patient_id'], inpatient_data['room_id'], inpatient_data['status'])
 
             # Flash success message and redirect
             flash("Inpatient added successfully!", "success")

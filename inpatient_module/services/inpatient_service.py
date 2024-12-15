@@ -45,7 +45,7 @@ class InpatientService:
     def add_inpatient(self, patient_id: int, room_id: str, status: str) -> Optional[Inpatient]:
         """Add an inpatient if the patient ID is valid."""
         # Validate that the patient ID exists using the AdmissionService
-        patient = self.admission_service.get_patient(patient_id)
+        patient = self.admission_service.get_patient(int(patient_id))
         if not patient:
             raise ValueError(f"Patient with ID {patient_id} does not exist.")
 
@@ -55,7 +55,9 @@ class InpatientService:
             patient_id=patient_id,
             room_id=room_id,
             status=status,
-            admission_date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            admission_date=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            staff_id=0,
+            discharge_date=None
         )
 
         self.next_inpatient_id += 1
