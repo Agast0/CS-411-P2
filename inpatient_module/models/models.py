@@ -38,8 +38,8 @@ class Inpatient:
     def __init__(self,
                  id: int,
                  patient_id: int,
-                 admission_date: date,
-                 discharge_date: Optional[date],
+                 admission_date: str,
+                 discharge_date: Optional[str],
                  room_id: int,  # Ensure the argument is room_id
                  staff_id: int,
                  status: Optional[str] = None,
@@ -56,20 +56,11 @@ class Inpatient:
         self.tests = tests or []
 
     def to_dict(self):
-        if isinstance(self.admission_date, str):
-            self.admission_date = datetime.strptime(self.admission_date, "%Y-%m-%d").date()
-
-        if isinstance(self.discharge_date, str):
-            if self.discharge_date:
-                self.discharge_date = datetime.strptime(self.discharge_date, "%Y-%m-%d").date()
-            else:
-                self.discharge_date = None
-
         return {
             "id": self.id,
             "patient_id": self.patient_id,
-            "admission_date": self.admission_date.isoformat() if self.admission_date else None,
-            "discharge_date": self.discharge_date.isoformat() if self.discharge_date else None,
+            "admission_date": self.admission_date,
+            "discharge_date": self.discharge_date,
             "room_id": self.room_id,
             "staff_id": self.staff_id,
             "status": self.status,
@@ -82,8 +73,8 @@ class Inpatient:
         return Inpatient(
             id=data["id"],
             patient_id=data["patient_id"],
-            admission_date=date.fromisoformat(data["admission_date"]),
-            discharge_date=date.fromisoformat(data["discharge_date"]) if data["discharge_date"] else None,
+            admission_date=data["admission_date"],
+            discharge_date=data["discharge_date"] if data["discharge_date"] else None,
             room_id=data["room_id"],  # Ensure room_id is passed
             staff_id=data["staff_id"],
             status=data.get("status"),
@@ -97,7 +88,7 @@ class Test:
                  patient_id: int,
                  staff_id: int,  # Refers to staff handling the test
                  test_type: str,  # e.g., "Blood Test", "MRI"
-                 date: date,
+                 date: str,
                  result: Optional[str] = None):
         self.id = id
         self.patient_id = patient_id
@@ -112,7 +103,7 @@ class Test:
             "patient_id": self.patient_id,
             "staff_id": self.staff_id,
             "test_type": self.test_type,
-            "date": self.date.isoformat(),
+            "date": self.date,
             "result": self.result,
         }
 
@@ -123,6 +114,6 @@ class Test:
             patient_id=data["patient_id"],
             staff_id=data["staff_id"],
             test_type=data["test_type"],
-            date=date.fromisoformat(data["date"]),
+            date=data["date"],
             result=data.get("result")
         )

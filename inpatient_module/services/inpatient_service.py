@@ -1,9 +1,8 @@
 import json
 from typing import List, Optional
-from datetime import date, datetime
 from patient_admission_module.services.admission_service import AdmissionService
 from inpatient_module.models.models import Inpatient, Room, Test
-
+from datetime import date, datetime
 
 class InpatientService:
     def __init__(self):
@@ -195,7 +194,7 @@ class InpatientService:
             return inpatient
         return None
 
-    def add_test(self, inpatient_id: int, test_type: str, staff_id: int, test_date: date,
+    def add_test(self, inpatient_id: int, test_type: str, staff_id: int, test_date: str,
                  result: Optional[str] = None) -> bool:
         """Add a test to an inpatient's record."""
         inpatient = self.get_inpatient(inpatient_id)
@@ -210,14 +209,14 @@ class InpatientService:
                 date=test_date,
                 result=result
             )
-
-            # Add the test to the inpatient's record (assuming tests are stored in a list)
+            # # Add the test to the inpatient's record (assuming tests are stored in a list)
             if 'tests' not in inpatient:
                 inpatient['tests'] = []  # Initialize the tests list if not already present
 
-            inpatient['tests'].append(new_test.to_dict())  # Store the test as a dict
+            inpatient['tests'].append(test_id)  # Store the test as a dict
 
             # Save the updated inpatient data
+            print(inpatient)
             self.save_data(self.inpatients_file_path, self.inpatients)
             return True
 

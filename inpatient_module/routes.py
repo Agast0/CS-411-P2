@@ -56,20 +56,17 @@ def manage_inpatient():
     rooms = inpatient_service.get_all_rooms()
     return render_template('manage_inpatient.html', inpatients=inpatients, rooms=rooms)
 
-
 # Endpoint to view details of a single inpatient
 @inpatient_bp.route('/<int:inpatient_id>')
 def view_inpatient(inpatient_id):
     inpatient = inpatient_service.get_inpatient2(inpatient_id)
     return render_template('view_inpatient.html', inpatient=inpatient)
 
-
 # Endpoint to view details of a single room
 @inpatient_bp.route('/room/<int:room_id>')
 def view_room(room_id):
     room_inpatients = inpatient_service.get_inpatients_by_room(room_id)
     return render_template('view_room.html', room_id=room_id, inpatients=room_inpatients)
-
 
 # Endpoint to assign/update a room for an inpatient
 @inpatient_bp.route('/<int:inpatient_id>/assign-room', methods=['POST'])
@@ -91,8 +88,6 @@ def assign_room(inpatient_id):
 
     return redirect(url_for('inpatient.view_inpatient', inpatient_id=inpatient_id))
 
-
-
 # Endpoint to add notes for an inpatient
 @inpatient_bp.route('/<int:inpatient_id>/notes', methods=['POST'])
 def add_notes(inpatient_id):
@@ -111,7 +106,6 @@ def add_notes(inpatient_id):
         flash("Failed to add note.", "danger")
 
     return redirect(url_for('inpatient.view_inpatient', inpatient_id=inpatient_id))
-
 @inpatient_bp.route('/<int:inpatient_id>/change_status', methods=['POST'])
 def change_status(inpatient_id):
     """Change the status of an inpatient."""
@@ -128,8 +122,6 @@ def change_status(inpatient_id):
     except ValueError as e:
         flash(f"Error: {str(e)}", "danger")
         return redirect(url_for('inpatient.view_inpatient', inpatient_id=inpatient_id))
-
-
 @inpatient_bp.route('/<int:inpatient_id>/discharge', methods=['POST'])
 def discharge(inpatient_id):
     try:
@@ -144,8 +136,6 @@ def discharge(inpatient_id):
         print(f"Error discharging inpatient: {e}")
         flash("An error occurred while discharging the patient. Please try again.", "danger")
         return redirect(url_for('inpatient.view_inpatient', inpatient_id=inpatient_id))
-
-
 # Endpoint to remove an inpatient
 @inpatient_bp.route('/<int:inpatient_id>/remove', methods=['POST'])
 def remove(inpatient_id):
@@ -165,7 +155,6 @@ def remove(inpatient_id):
         flash("An error occurred while removing the inpatient. Please try again.", "danger")
         return redirect(url_for('inpatient.manage_inpatient'))
 
-
 @inpatient_bp.route('/<int:inpatient_id>/add_test', methods=['POST'])
 def add_test(inpatient_id):
     test_type = request.form.get('test_type')
@@ -178,9 +167,6 @@ def add_test(inpatient_id):
         return redirect(url_for('inpatient.view_inpatient', inpatient_id=inpatient_id))
 
     try:
-        # Parse test_date into a date object
-        test_date = date.fromisoformat(test_date)
-
         # Call the service to add the test
         success = inpatient_service.add_test(
             inpatient_id=inpatient_id,
