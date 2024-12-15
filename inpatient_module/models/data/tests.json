@@ -1,0 +1,26 @@
+[
+  {
+    "id": 301,
+    "patient_id": 101,
+    "staff_id": 601,
+    "test_type": "Blood Test",
+    "date": "2024-12-01",
+    "result": "Normal"
+  },
+  {
+    "id": 302,
+    "patient_id": 101,
+    "staff_id": 602,
+    "test_type": "X-Ray",
+    "date": "2024-12-02",
+    "result": "Mild inflammation in lungs."
+  },
+  {
+    "id": 303,
+    "patient_id": 102,
+    "staff_id": 603,
+    "test_type": "Ultrasound",
+    "date": "2024-12-05",
+    "result": "Post-surgical recovery normal."
+  }
+]

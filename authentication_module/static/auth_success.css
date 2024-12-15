@@ -34,7 +34,6 @@ p {
     color: white;
     text-decoration: none;
     border-radius: 4px;
-    width: 120px;
     text-align: center;
     cursor: pointer;
     font-size: 16px;
@@ -58,8 +57,8 @@ p {
 /* Flexbox container to align buttons horizontally */
 .button-container {
     display: flex;
-    gap: 10px; /* Space between buttons */
+    width: 100%;
+    flex-direction: column;
     justify-content: center;
-    margin-top: 20px;
 }
 

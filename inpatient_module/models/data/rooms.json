@@ -1,0 +1,20 @@
+[
+  {
+    "room_id": 1,
+    "number": "101A",
+    "type": "Single",
+    "is_occupied": true
+  },
+  {
+    "room_id": 2,
+    "number": "102B",
+    "type": "Double",
+    "is_occupied": false
+  },
+  {
+    "room_id": 3,
+    "number": "ICU-03",
+    "type": "ICU",
+    "is_occupied": true
+  }
+]

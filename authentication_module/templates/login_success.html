@@ -19,6 +19,7 @@
                 <a href="/auth/patient-login" class="btn">Patient Login</a>
             {% else %}
                 <a href="/admission/patients" class="btn">Patient Admissions</a>
+                <a href="/inpatient" class="btn">Inpatient Information</a>
             {% endif %}
 
             <form action="{{ url_for('auth.logout') }}" method="GET" style="margin: 0;">

@@ -11,18 +11,18 @@ class RoomType(Enum):
 
 class Room:
     def __init__(self,
-                 id: int,
+                 room_id: int,
                  number: str,
                  type: RoomType,  # Enum for room type
                  is_occupied: bool):
-        self.id = id
+        self.room_id = room_id
         self.number = number
         self.type = type
         self.is_occupied = is_occupied
 
     def to_dict(self):
         return {
-            "id": self.id,
+            "room_id": self.room_id,
             "number": self.number,
             "type": self.type.value,  # Save the enum value as string
             "is_occupied": self.is_occupied,
@@ -31,31 +31,35 @@ class Room:
     @staticmethod
     def from_dict(data: dict):
         return Room(
-            id=data["id"],
+            room_id=data["room_id"],
             number=data["number"],
             type=RoomType(data["type"]),
             is_occupied=data["is_occupied"]
         )
 
 
-class InpatientRecord:
+class Inpatient:
     def __init__(self,
                  id: int,
                  patient_id: int,
                  admission_date: date,
                  discharge_date: Optional[date],
-                 room_id: int,
-                 staff_id: int,  # Refers to staff handling the patient
+                 room_id: int,  # Ensure the argument is room_id
+                 staff_id: int,
+                 status: Optional[str] = None,
                  treatment_notes: Optional[str] = None,
-                 tests: Optional[List[int]] = None):  # List of test IDs
+                 notes: Optional[List[str]] = None,
+                 tests: Optional[List[int]] = None):
         self.id = id
         self.patient_id = patient_id
         self.admission_date = admission_date
         self.discharge_date = discharge_date
-        self.room_id = room_id
+        self.room_id = room_id  # Assign room_id to the attribute
         self.staff_id = staff_id
+        self.status = status
         self.treatment_notes = treatment_notes
-        self.tests = tests or []  # Initialize as an empty list if not provided
+        self.notes = notes or []
+        self.tests = tests or []
 
     def to_dict(self):
         return {
@@ -63,22 +67,26 @@ class InpatientRecord:
             "patient_id": self.patient_id,
             "admission_date": self.admission_date.isoformat(),
             "discharge_date": self.discharge_date.isoformat() if self.discharge_date else None,
-            "room_id": self.room_id,
+            "room_id": self.room_id,  # Use room_id in the dict
             "staff_id": self.staff_id,
+            "status": self.status,
             "treatment_notes": self.treatment_notes,
+            "notes": self.notes,
             "tests": self.tests,
         }
 
     @staticmethod
     def from_dict(data: dict):
-        return InpatientRecord(
+        return Inpatient(
             id=data["id"],
             patient_id=data["patient_id"],
             admission_date=date.fromisoformat(data["admission_date"]),
             discharge_date=date.fromisoformat(data["discharge_date"]) if data["discharge_date"] else None,
-            room_id=data["room_id"],
+            room_id=data["room_id"],  # Ensure room_id is passed
             staff_id=data["staff_id"],
+            status=data.get("status"),
             treatment_notes=data.get("treatment_notes"),
+            notes=data.get("notes", []),
             tests=data.get("tests", [])
         )
 
