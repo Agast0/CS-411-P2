@@ -60,7 +60,7 @@ def manage_inpatient():
 # Endpoint to view details of a single inpatient
 @inpatient_bp.route('/<int:inpatient_id>')
 def view_inpatient(inpatient_id):
-    inpatient = inpatient_service.get_inpatient(inpatient_id)
+    inpatient = inpatient_service.get_inpatient2(inpatient_id)
     return render_template('view_inpatient.html', inpatient=inpatient)
 
 

@@ -24,8 +24,8 @@ class InpatientService:
             return []
 
     def save_data(self, file_path: str, data: List[dict]):
-        """Save data to a JSON file"""
-        json.dump(data, file, indent=4)
+        with open(file_path, 'w') as file:
+            json.dump(data, file, indent=4)
 
     def get_next_id(self, data: List[dict]) -> int:
         """Get the next available ID by finding the max ID in the data."""
@@ -66,6 +66,14 @@ class InpatientService:
         return inpatient
 
     def get_inpatient(self, inpatient_id: int) -> Optional[Inpatient]:
+        """Get an inpatient by their ID, including their actual tests."""
+        for inpatient in self.inpatients:
+            if inpatient['id'] == inpatient_id:
+                inpatient_obj = Inpatient(**inpatient)
+                return inpatient_obj
+        return None
+
+    def get_inpatient2(self, inpatient_id: int) -> Optional[Inpatient]:
         """Get an inpatient by their ID, including their actual tests."""
         for inpatient in self.inpatients:
             if inpatient['id'] == inpatient_id:
@@ -159,6 +167,7 @@ class InpatientService:
         return inpatient
 
     def change_status(self, inpatient_id: int, new_status: str) -> Optional[Inpatient]:
+        print("changing status", inpatient_id, new_status)
         inpatient = self.get_inpatient(inpatient_id)
         if not inpatient:
             raise ValueError(f"Inpatient with ID {inpatient_id} does not exist.")
@@ -168,9 +177,9 @@ class InpatientService:
         for i, inp in enumerate(self.inpatients):
             if inp['id'] == inpatient_id:
                 self.inpatients[i] = inpatient.to_dict()
-        self.save_data(self.inpatients_file_path, self.inpatients)
+                print(self.inpatients[i])
 
-        return inpatient
+        self.save_data(self.inpatients_file_path, self.inpatients)
 
     def discharge_inpatient(self, inpatient_id: int) -> Optional[Inpatient]:
         inpatient = self.get_inpatient(inpatient_id)
@@ -249,9 +258,6 @@ class InpatientService:
             if inp["id"] == inpatient_id:
                 self.inpatients[i] = inpatient.to_dict()
 
-
-        print(self.inpatients)
         self.save_data(self.inpatients_file_path, self.inpatients)
 
         return inpatient
-
